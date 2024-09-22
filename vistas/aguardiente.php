@@ -1,18 +1,34 @@
 <?php
 require_once './controlador/ProductoController.php'; 
 
-// Crear instancia del controlador
+// Verificar si el usuario está logueado
+$usuarioLogueado = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : null;
+
+// Crear instancia del controlador de productos
 $productoController = new ProductoController();
 $resultado = $productoController->listarProductos(5); 
 
 $mensaje_error = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
 $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : '';
 ?>
-<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3">
-    <a href="index.php?vista=login" class="btn btn-primary me-2">Iniciar Sesión</a>
-    <a href="index.php?vista=customer_new" class="btn btn-primary">Registrarse</a>
-    <a href="index.php?vista=carrito" class="btn btn-primary">Carrito</a>
+
+<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
+    <?php if ($usuarioLogueado): ?>
+        <!-- Recuadro oculto que se muestra al pasar el mouse -->
+        <div class="user-info">
+            <span class="me-2">Bienvenido, <?php echo htmlspecialchars($usuarioLogueado); ?></span>
+            <div class="user-menu">
+                <a href="index.php?vista=logout" class="btn btn-danger btn-sm rounded shadow">Cerrar sesión</a>
+            </div>
+        </div>
+        <a href="index.php?vista=carrito" class="btn btn-primary btn-sm rounded shadow">Carrito</a>
+    <?php else: ?>
+        <!-- Mostrar los botones de login y registro si no está logueado -->
+        <a href="index.php?vista=login" class="btn btn-primary btn-sm me-2 rounded shadow">Iniciar Sesión</a>
+        <a href="index.php?vista=customer_new" class="btn btn-primary btn-sm me-2 rounded shadow">Registrarse</a>
+    <?php endif; ?>
 </div>
+
 
 <main>
 <div class="container">
@@ -77,9 +93,12 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
 require './inc/footer.php'; // Incluir archivo de pie de página
 ?>
 
-<script src="comprar-productos.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
+
+
 
 

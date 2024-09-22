@@ -1,7 +1,7 @@
 <?php
 // Incluir archivo de conexión y sesión
-require_once './modelo/Utils.php'; // Ahora incluye Utils.php
-require_once "./controlador/SessionController.php"; // Incluir el archivo Utils.php
+require_once '../modelo/Utils.php'; // Ahora incluye Utils.php
+require_once "../controlador/SessionController.php"; // Incluir el archivo Utils.php
 
 $sessionController = new SessionController();
 $sessionController->startSession(); // Iniciar la sesión

@@ -22,9 +22,14 @@ $stmt->execute([$usuario_id]);
 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3">
-    <a href="index.php?vista=login" class="btn btn-primary me-2">Iniciar Sesión</a>
-    <a href="index.php?vista=customer_new" class="btn btn-primary">Registrarse</a>
+<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
+    <!-- Recuadro de bienvenida solo si el usuario está logueado -->
+    <div class="user-info">
+        <span class="me-2">Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+        <div class="user-menu">
+            <a href="index.php?vista=logout" class="btn btn-danger btn-sm">Cerrar sesión</a>
+        </div>
+    </div>
 </div>
 
 <main>

@@ -94,6 +94,18 @@ if ($mensaje) {
 // Mostrar el formulario solo si es visible
 if ($formulario_visible) {
 ?>
+
+<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
+    <!-- Recuadro de bienvenida solo si el usuario está logueado -->
+    <div class="user-info">
+        <span class="me-2">Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
+        <div class="user-menu">
+            <a href="index.php?vista=logout" class="btn btn-danger btn-sm">Cerrar sesión</a>
+        </div>
+    </div>
+</div>
+
+
 <form method="post" class="container mt-4">
     <div class="form-group">
         <label for="direccion">Dirección de Envío:</label>

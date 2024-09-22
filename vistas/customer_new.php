@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             Hola!<br>
             Gracias por registrarte.<br>
             Para activar tu cuenta, por favor haz clic en el siguiente enlace:<br>
-            <a href='http://localhost/Proyecto-Donde-Deya-V2-master/index.php?vista=activate_customer&email=$emailEncode&token=$tokenEncode'>Activar cuenta</a>";
+            <a href='http://localhost/Proyecto-Donde-Deya-V2.2-main/index.php?vista=activate_customer&email=$emailEncode&token=$tokenEncode'>Activar cuenta</a>";
 
             $mail->send();
             echo 'Correo enviado';
@@ -164,103 +164,71 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         /* Redirección a login.php con GET para informar del envio del email */
-        header('Location: index.php?vista=tienda');
+        header('Location: index.php?vista=login');
         die();
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Nuevo Cliente</title>
-    <style>
-        form {
-            width: 50%; 
-            margin: 40px auto; 
-            padding: 20px; 
-            border: 1px solid #ccc; 
-            border-radius: 10px; 
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-        }
-        label {
-            display: block; 
-            margin-bottom: 10px; 
-        }
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%; 
-            padding: 10px; 
-            margin-bottom: 20px;
-            border: 1px solid #ccc; 
-        }
-        input[type="submit"] {
-            background-color: #4CAF50; 
-            color: #fff; 
-            padding: 10px 20px; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-        }
-        input[type="submit"]:hover {
-            background-color: #3e8e41; 
-        }
-    </style>
-</head>
 <body>
-    <!-- Mostramos errores por HTML -->
-    <?php if (isset($errores)): ?>
-    <ul class="errores">
-        <?php 
-            foreach ($errores as $error) {
-                echo '<li>' . $error . '</li>';
-            } 
-        ?> 
-    </ul>
-    <?php endif; ?>
-    <!-- Formulario -->
-    <form action="" method="post">
-        <div>
-            <!-- Campo de Nombre -->
-            <label>
-                Nombre
-                <input type="text" name="nombre">
-            </label>
+    <div class="container mt-5">
+        <!-- Mostramos errores por HTML -->
+        <?php if (!empty($errores)): ?>
+        <div class="notification is-danger">
+            <ul>
+                <?php foreach ($errores as $error): ?>
+                    <li><?php echo htmlspecialchars($error); ?></li>
+                <?php endforeach; ?>
+            </ul>
         </div>
-        <div>
-            <!-- Campo de Apellido -->
-            <label>
-                Apellido
-                <input type="text" name="apellido">
-            </label>
-        </div>
-        <div>
-            <!-- Campo de Usuario -->
-            <label>
-                Usuario
-                <input type="text" name="usuario">
-            </label>
-        </div>
-        <div>
-            <!-- Campo de Email -->
-            <label>
-                E-mail
-                <input type="email" name="email">
-            </label>
-        </div>
-        <div>
-            <!-- Campo de Contraseña -->
-            <label>
-                Contraseña
-                <input type="password" name="password">
-            </label>
-        </div>
-        <div>
-            <!-- Botón submit -->
-            <input type="submit" value="Registrarse">
-        </div>
-    </form>
+        <?php endif; ?>
+        
+        <!-- Formulario -->
+        <form action="" method="post" class="box">
+            <h2 class="title is-4">Registro</h2>
+
+            <div class="field">
+                <label class="label">Nombre</label>
+                <div class="control">
+                    <input class="input" type="text" name="nombre" placeholder="Introduce tu nombre" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Apellido</label>
+                <div class="control">
+                    <input class="input" type="text" name="apellido" placeholder="Introduce tu apellido" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Usuario</label>
+                <div class="control">
+                    <input class="input" type="text" name="usuario" placeholder="Crea un nombre de usuario" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">E-mail</label>
+                <div class="control">
+                    <input class="input" type="email" name="email" placeholder="Introduce tu correo electrónico" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Contraseña</label>
+                <div class="control">
+                    <input class="input" type="password" name="password" placeholder="Crea una contraseña" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary" type="submit">Registrarse</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
-</html>
 
 <?php require_once "./inc/footer.php"; ?>
 
