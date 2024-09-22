@@ -1,0 +1,310 @@
+@font-face {
+    font-family: "Deya";
+    src: url("./QwitcherGrypen-Regular.ttf") format("woff2");
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Main";
+    src: url("./JosefinSans-VariableFont_wght.ttf") format("woff2");
+    font-display: swap;
+}
+
+/*Estilos globales*/
+*::after,
+*::before,
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Main";
+    margin: 0 auto;
+    padding: 0;
+    background-color: #DDE6ED;
+    color: #333;
+}
+
+img{
+    max-width: 100%;
+}
+
+/*estilos del header*/
+
+header{
+    background-color: #272727;
+    height: 200px;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    
+}
+
+header img {
+    float: left;
+    height: 200px;
+
+}
+
+header h1 {
+    font-size: 8rem;
+    color: white;
+    padding: 0px 317px;;
+    text-align: center;
+    font-family: "Deya";
+}
+
+/*estilos footer*/
+
+.personal-info {
+    background-color: #272727;
+    padding: 1.5%;
+    font-family: "Main";
+    font-size: 40px;
+    color: #ffffffd3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 45px;
+}
+
+/*estilos barra de navegación*/
+
+.link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    padding: 15px 28px;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.link:hover{
+    background-color: #34495e;
+    transition: .5s;
+}
+
+.navbarBasicExample, .navbar-menu {
+    background: #717d7e;
+}
+
+.button.is-rounded.custom-color {
+    background-color: #ff2020; 
+    color: #fff; 
+    border: none; 
+}
+
+.button.is-primary.is-rounded.custom {
+    background-color: #069214; 
+    color: #fff; 
+    border: none; 
+}
+
+.navbar-dropdown a.navbar-item:not(.is-active):not(.is-selected):hover {
+    background-color: #34495e;
+  }
+
+  .container.is-fluid {
+    margin-top: 20px;
+  }
+
+.container.is-fluid.custom {
+    padding-left: 32px;
+    padding-right: 32px;
+    width: 100%;
+    height: 100vh;
+    margin-top: 20px;
+}
+
+.custom-container {
+    margin-bottom: 330px !important;
+  }
+
+.custom-title {
+    margin-top: 30px !important;
+}
+
+/*estilos login*/
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #DDE6ED;
+}
+
+/* Estilo para el formulario */
+.box_login {
+    background: #839192;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Título del formulario */
+.box_login_title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Estilos para los campos del formulario */
+.field {
+    margin-bottom: 15px;
+}
+
+/* Estilo para las etiquetas de los campos */
+.label {
+    font-size: 1em;
+    color: black;
+    margin-bottom: 5px;
+}
+
+/* Estilo para los controles de entrada */
+.control {
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+    color: #333;
+    box-sizing: border-box;
+}
+
+/* Estilo del botón de envío */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #aab7b8;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo del párrafo que contiene el botón */
+.texto {
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+.message_error {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 12px 9px;
+}
+
+
+/*estilos inventario*/
+
+.columns {
+    display: flex;
+    flex-direction: column;
+}
+
+.container.pb-6.pt-6 {
+    margin: 4px auto;
+    position: relative;
+    width: 60%;
+    margin-top: -110px;
+}
+
+
+
+@media (max-width: 360px) {
+    header {
+        background-color: #272727;
+        height: 135px;
+        width: 100%;
+    }
+    header h1 {
+        font-size: 1.5rem;
+        color: white;
+        padding: 79px 29px;
+        text-align: center;
+    }
+    header img {
+        float: left;
+        height: 135px;
+    }
+
+    .navbar {
+        background-color: #717d7e !important;
+      }
+      .navbar-burger span {
+        color: white;
+    }
+}
+
+@media(max-width: 1200px) {
+    header h1 {
+        font-size: 8rem;
+        color: white;
+        padding: 0px 215px;
+        text-align: center;
+    }
+
+    .navbar {
+        background-color: #717d7e !important;
+      }
+      .navbar-burger span {
+        color: white;
+    }
+    
+}
+
+@media (max-width: 1000px) {
+    
+    header h1 {
+    font-size: 4.5rem;
+    color: white;
+    padding: 41px 239px;
+    text-align: center;
+    }
+
+    .navbar {
+        background-color: #717d7e !important;
+      }
+      .navbar-burger span {
+        color: white;
+    }
+    
+}
+
+@media (max-width: 858px) {
+    header h1 {
+        font-size: 1.5rem;
+        color: white;
+        padding: 48px 71px;
+        text-align: center;
+    }
+    .navbar {
+        background-color: #717d7e !important;
+      }
+      .navbar-burger span {
+        color: white;
+    }
+
+}
+
