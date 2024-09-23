@@ -12,6 +12,8 @@ $sessionController->checkProtectedView($vista_actual);
 $controller = new MainController();
 $controller->handleRequest();
 
+?>
+
 
 
 
