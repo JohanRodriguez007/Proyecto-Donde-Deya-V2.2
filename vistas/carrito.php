@@ -20,6 +20,9 @@ $sql = "SELECT carrito.carrito_id, producto.producto_nombre, producto.producto_p
 $stmt = $conn->prepare($sql);
 $stmt->execute([$usuario_id]);
 $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Obtener la URL de la vista anterior
+$prev_page = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'index.php';
 ?>
 
 <div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
@@ -117,6 +120,10 @@ $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php } else { ?>
             <p>Tu carrito está vacío.</p>
         <?php } ?>
+        <!-- Botón para regresar a la vista anterior -->
+        <div class="text-end mt-3">
+            <a href="<?php echo $prev_page; ?>" class="btn btn-secondary">Regresar</a>
+        </div>
     </div>
 </main>
 
@@ -127,6 +134,7 @@ require './inc/footer.php'; // Incluir archivo de pie de página
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
 
 

@@ -13,12 +13,20 @@ $mensaje = null;
 
 // Verificar si se ha enviado el formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Capturar los datos del formulario
-    $direccion = isset($_POST['direccion']) ? $_POST['direccion'] : null;
+    // Capturar los datos del formulario de dirección
+    $tipo_via = isset($_POST['tipo_via']) ? $_POST['tipo_via'] : null;
+    $numero_via_principal = isset($_POST['numero_via_principal']) ? $_POST['numero_via_principal'] : null;
+    $numero_via_secundaria = isset($_POST['numero_via_secundaria']) ? $_POST['numero_via_secundaria'] : null;
+    $localidad = isset($_POST['localidad']) ? $_POST['localidad'] : null;
+    $barrio = isset($_POST['barrio']) ? $_POST['barrio'] : null;
+    $detalles = isset($_POST['detalles']) ? $_POST['detalles'] : null;
     $metodo_pago = isset($_POST['metodo_pago']) ? $_POST['metodo_pago'] : null;
 
+    // Construir la dirección concatenando las partes seleccionadas
+    $direccion = "$tipo_via $numero_via_principal No $numero_via_secundaria, $localidad $barrio, $detalles";
+
     // Validar que los campos no estén vacíos
-    if ($direccion && $metodo_pago) {
+    if ($tipo_via && $numero_via_principal && $numero_via_secundaria && $localidad && $barrio && $detalles &&  $metodo_pago) {
         $usuario_id = $_SESSION['id'];
         $conn = Utils::conexion(); // Instanciar la conexión
         
@@ -32,14 +40,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt_carrito->execute([$usuario_id]);
             $productos = $stmt_carrito->fetchAll(PDO::FETCH_ASSOC);
 
-            // Insertar el pedido en la tabla pedidos (sin el total)
+            // Insertar el pedido en la tabla pedidos
             $sql_pedido = "INSERT INTO pedidos (usuario_id, direccion, metodo_pago) VALUES (?, ?, ?)";
             $stmt_pedido = $conn->prepare($sql_pedido);
             $stmt_pedido->execute([$usuario_id, $direccion, $metodo_pago]);
 
             // Obtener el ID del nuevo pedido
             $pedido_id = $conn->lastInsertId();
-
             $total_pedido = 0;
 
             // Insertar detalles del pedido en la tabla detalle_pedido y calcular el total
@@ -96,7 +103,6 @@ if ($formulario_visible) {
 ?>
 
 <div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
-    <!-- Recuadro de bienvenida solo si el usuario está logueado -->
     <div class="user-info">
         <span class="me-2">Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>
         <div class="user-menu">
@@ -105,12 +111,54 @@ if ($formulario_visible) {
     </div>
 </div>
 
-
+<!-- Formulario de dirección con múltiples campos para Bogotá -->
 <form method="post" class="container mt-4">
     <div class="form-group">
-        <label for="direccion">Dirección de Envío:</label>
-        <input type="text" name="direccion" id="direccion" class="form-control" required>
+        <label for="tipo_via">Tipo de Vía:</label>
+        <select name="tipo_via" id="tipo_via" class="form-control" required>
+            <option value="Calle">Calle</option>
+            <option value="Carrera">Carrera</option>
+            <option value="Avenida">Avenida</option>
+            <option value="Diagonal">Diagonal</option>
+            <option value="Transversal">Transversal</option>
+        </select>
     </div>
+
+    <div class="form-group">
+        <label for="numero_via_principal">Número principal:</label>
+        <input type="text" name="numero_via_principal" id="numero_via_principal" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="numero_via_secundaria">Número</label>
+        <input type="text" name="numero_via_secundaria" id="numero_via_secundaria" class="form-control" required>
+        <input type="text" name="numero_via_secundaria" id="numero_via_secundaria" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="localidad">Localidad:</label>
+        <select name="localidad" id="localidad" class="form-control" required>
+            <option value="Chapinero">Chapinero</option>
+            <option value="Usaquén">Usaquén</option>
+            <option value="Suba">Suba</option>
+            <option value="Kennedy">Kennedy</option>
+            <option value="Teusaquillo">Teusaquillo</option>
+            <option value="Engativá">Engativá</option>
+            <!-- Agregar más localidades de Bogotá -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="barrio">Barrio:</label>
+        <input type="text" name="barrio" id="barrio" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+        <label for="torre">Detalles Adicionales</label>
+        <input type="text" name="detalles" id="detalles" class="form-control" required>
+    </div>
+
+  
 
     <div class="form-group">
         <label for="metodo_pago">Método de Pago:</label>
@@ -122,6 +170,7 @@ if ($formulario_visible) {
 
     <button type="submit" class="btn btn-primary">Realizar Pedido</button>
 </form>
+
 <?php
 }
 ?>
@@ -129,6 +178,9 @@ if ($formulario_visible) {
 <?php
 require './inc/footer.php'; // Incluir archivo de pie de página
 ?>
+
+
+
 
 
 

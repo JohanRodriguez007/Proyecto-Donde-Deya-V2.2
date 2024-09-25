@@ -11,7 +11,7 @@
         $conn = Utils::conexion(); // Instanciar la conexión
 
 		$id = (isset($_GET['category_id_up'])) ? $_GET['category_id_up'] : 0;
-		$id=limpiar_cadena($id);
+		$id=Utils::limpiar_cadena($id);
 
 		/*== Verificando categoria ==*/
     	$check_categoria=Utils::conexion();
