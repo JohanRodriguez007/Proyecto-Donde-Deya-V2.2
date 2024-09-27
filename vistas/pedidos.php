@@ -17,16 +17,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_via = isset($_POST['tipo_via']) ? $_POST['tipo_via'] : null;
     $numero_via_principal = isset($_POST['numero_via_principal']) ? $_POST['numero_via_principal'] : null;
     $numero_via_secundaria = isset($_POST['numero_via_secundaria']) ? $_POST['numero_via_secundaria'] : null;
+    $numero_via_complemento = isset($_POST['numero_via_complemento']) ? $_POST['numero_via_complemento'] : null;
     $localidad = isset($_POST['localidad']) ? $_POST['localidad'] : null;
     $barrio = isset($_POST['barrio']) ? $_POST['barrio'] : null;
     $detalles = isset($_POST['detalles']) ? $_POST['detalles'] : null;
     $metodo_pago = isset($_POST['metodo_pago']) ? $_POST['metodo_pago'] : null;
 
     // Construir la dirección concatenando las partes seleccionadas
-    $direccion = "$tipo_via $numero_via_principal No $numero_via_secundaria, $localidad $barrio, $detalles";
+    $direccion = "$tipo_via $numero_via_principal No $numero_via_secundaria - $numero_via_complemento, $localidad $barrio, $detalles";
 
     // Validar que los campos no estén vacíos
-    if ($tipo_via && $numero_via_principal && $numero_via_secundaria && $localidad && $barrio && $detalles &&  $metodo_pago) {
+    if ($tipo_via && $numero_via_principal && $numero_via_secundaria && $numero_via_complemento && $localidad && $barrio && $detalles &&  $metodo_pago) {
         $usuario_id = $_SESSION['id'];
         $conn = Utils::conexion(); // Instanciar la conexión
         
@@ -132,7 +133,7 @@ if ($formulario_visible) {
     <div class="form-group">
         <label for="numero_via_secundaria">Número</label>
         <input type="text" name="numero_via_secundaria" id="numero_via_secundaria" class="form-control" required>
-        <input type="text" name="numero_via_secundaria" id="numero_via_secundaria" class="form-control" required>
+        <input type="text" name="numero_via_complemento" id="numero_via_complemento" class="form-control" required>
     </div>
 
     <div class="form-group">

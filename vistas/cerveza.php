@@ -1,4 +1,17 @@
 <?php
+
+if (isset($_SESSION['debug_messages'])) {
+    foreach ($_SESSION['debug_messages'] as $message) {
+        echo "<div class='debug-message'>$message</div>";
+    }
+    unset($_SESSION['debug_messages']); // Limpiar después de mostrar
+}
+?>
+
+
+
+
+<?php
 require_once './controlador/ProductoController.php'; 
 
 // Verificar si el usuario está logueado

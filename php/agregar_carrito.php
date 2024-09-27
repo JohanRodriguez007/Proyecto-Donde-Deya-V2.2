@@ -20,54 +20,71 @@ $usuario_id = $_SESSION['id'];
 
 // Verificar que los datos son válidos
 if ($producto_id <= 0 || $cantidad <= 0) {
-    header("Location: ../index.php?vista=$vista_actual&error=Datos inválidos para agregar al carrito.");
+    $_SESSION['error'] = "Datos inválidos para agregar al carrito.";
+    header("Location: ../index.php?vista=$vista_actual");
     exit();
 }
 
 // Obtener la conexión PDO instanciando a la clase()
 $conn = Utils::conexion();
 
-// Verificar la cantidad disponible en stock
-$sql_stock = "SELECT producto_stock FROM producto WHERE producto_id = ?";
-$stmt_stock = $conn->prepare($sql_stock);
-$stmt_stock->execute([$producto_id]);
-$stock = $stmt_stock->fetchColumn();
+try {
+    $conn->beginTransaction();
 
-if ($cantidad > $stock) {
-    header("Location: ../index.php?vista=$vista_actual&error=La cantidad solicitada excede el stock disponible.");
-    exit();
-}
+    // Primero, verificar si el producto ya está en el carrito del usuario
+    $sql = "SELECT cantidad FROM carrito WHERE usuario_id = ? AND producto_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$usuario_id, $producto_id]);
+    $producto_en_carrito = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Primero, verificar si el producto ya está en el carrito del usuario
-$sql = "SELECT cantidad FROM carrito WHERE usuario_id = ? AND producto_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->execute([$usuario_id, $producto_id]);
-$producto_en_carrito = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($producto_en_carrito) {
+        // Si el producto ya está en el carrito, actualizar la cantidad
+        $nueva_cantidad = $producto_en_carrito['cantidad'] + $cantidad;
 
-if ($producto_en_carrito) {
-    // Si el producto ya está en el carrito, actualizar la cantidad
-    $nueva_cantidad = $producto_en_carrito['cantidad'] + $cantidad;
-
-    // Verificar nuevamente el stock disponible para la nueva cantidad
-    if ($nueva_cantidad > $stock) {
-        header("Location: ../index.php?vista=$vista_actual&error=La cantidad total en el carrito excede el stock disponible.");
-        exit();
+        // Actualizar la cantidad en el carrito
+        $sql_actualizar = "UPDATE carrito SET cantidad = ? WHERE usuario_id = ? AND producto_id = ?";
+        $stmt_actualizar = $conn->prepare($sql_actualizar);
+        $stmt_actualizar->execute([$nueva_cantidad, $usuario_id, $producto_id]);
+    } else {
+        // Si el producto no está en el carrito, insertarlo
+        $sql_insertar = "INSERT INTO carrito (usuario_id, producto_id, cantidad) VALUES (?, ?, ?)";
+        $stmt_insertar = $conn->prepare($sql_insertar);
+        $stmt_insertar->execute([$usuario_id, $producto_id, $cantidad]);
     }
 
-    $sql_actualizar = "UPDATE carrito SET cantidad = ? WHERE usuario_id = ? AND producto_id = ?";
-    $stmt_actualizar = $conn->prepare($sql_actualizar);
-    $stmt_actualizar->execute([$nueva_cantidad, $usuario_id, $producto_id]);
-} else {
-    // Si el producto no está en el carrito, insertarlo
-    $sql_insertar = "INSERT INTO carrito (usuario_id, producto_id, cantidad) VALUES (?, ?, ?)";
-    $stmt_insertar = $conn->prepare($sql_insertar);
-    $stmt_insertar->execute([$usuario_id, $producto_id, $cantidad]);
-}
+    // Restar del stock
+    $sql_update_stock = "UPDATE producto SET producto_stock = producto_stock - ? WHERE producto_id = ?";
+    $stmt_update_stock = $conn->prepare($sql_update_stock);
+    $stmt_update_stock->execute([$cantidad, $producto_id]);
 
-// Redirigir a la vista desde la cual se realizó la solicitud con mensaje de éxito
-header("Location: ../index.php?vista=$vista_actual&success=Producto agregado al carrito.");
-exit();
+    // Confirmar transacción
+    $conn->commit();
+
+    // Guardar mensaje de éxito en la sesión
+    $_SESSION['success'] = "Producto agregado al carrito.";
+    header("Location: ../index.php?vista=$vista_actual");
+    exit();
+} catch (Exception $e) {
+    // Revertir cambios en caso de error
+    $conn->rollBack();
+    $_SESSION['error'] = "Error al agregar el producto al carrito: " . $e->getMessage();
+    header("Location: ../index.php?vista=$vista_actual");
+    exit();
+}
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

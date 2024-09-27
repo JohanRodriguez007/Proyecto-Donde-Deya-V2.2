@@ -37,7 +37,7 @@ try {
     $stmt->execute([$pedido_id]);
 
     // Obtener detalles de los productos
-    $sql_detalle = "SELECT pd.producto_id, pr.producto_nombre, pd.cantidad, pd.total, pr.producto_stock, pr.producto_precio, pr.producto_foto
+    $sql_detalle = "SELECT pd.producto_id, pr.producto_nombre, pd.cantidad, pd.total, pr.producto_foto
                     FROM detalle_pedido pd
                     JOIN producto pr ON pd.producto_id = pr.producto_id
                     WHERE pd.pedido_id = ?";
@@ -45,37 +45,8 @@ try {
     $stmt_detalle->execute([$pedido_id]);
     $detalles = $stmt_detalle->fetchAll(PDO::FETCH_ASSOC);
 
-    // Reducir el stock de cada producto, verificando que el stock sea suficiente
-    foreach ($detalles as $detalle) {
-        $producto_id = $detalle['producto_id'];
-        $cantidad = $detalle['cantidad'];
-        $stock_actual = $detalle['producto_stock'];
-
-        if ($stock_actual >= $cantidad) {
-            // Actualizar el stock en la tabla producto
-            $sqlUpdateStock = "UPDATE producto SET producto_stock = producto_stock - :cantidad WHERE producto_id = :producto_id";
-            $stmtUpdateStock = $conn->prepare($sqlUpdateStock);
-            $stmtUpdateStock->bindParam(':cantidad', $cantidad);
-            $stmtUpdateStock->bindParam(':producto_id', $producto_id);
-            $stmtUpdateStock->execute();
-        } else {
-            // Si no hay suficiente stock, deshacer la transacción y mostrar error
-            throw new Exception("No hay suficiente stock para el producto: {$detalle['producto_nombre']}. Stock actual: {$stock_actual}, Cantidad solicitada: {$cantidad}");
-        }
-    }
-
-    // Insertar en la tabla ventas
-    $sql_ventas = "INSERT INTO ventas (pedido_id, usuario_id, fecha_pedido, direccion, metodo_pago, total)
-                   VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt_ventas = $conn->prepare($sql_ventas);
-    $stmt_ventas->execute([
-        $pedido_id,
-        $pedido['usuario_id'],
-        $pedido['fecha_pedido'],
-        $pedido['direccion'],
-        $pedido['metodo_pago'],
-        $pedido['total']
-    ]);
+    // ** Se eliminó la sección de actualización de stock aquí **
+    // se eliminó la inserción en ventas ya que el trigger lo hace, duh
 
     // Confirmar la transacción
     $conn->commit();
@@ -133,6 +104,8 @@ try {
 // Finalizar el almacenamiento en búfer de salida
 ob_end_flush();
 ?>
+
+
 
 
 

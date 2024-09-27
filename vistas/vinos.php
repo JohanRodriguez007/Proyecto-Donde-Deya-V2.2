@@ -68,7 +68,7 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <form method="post" action="php/agregar_carrito.php">
-                                    <input type="hidden" name="vista_actual" value="cerveza">
+                                    <input type="hidden" name="vista_actual" value="vinos">
                                     <input type="hidden" name="producto_id" value="<?php echo $row['producto_id']; ?>">
                                     <input type="number" name="cantidad" min="1" max="<?php echo $row['producto_stock']; ?>" value="1" required>
                                     <button type="submit" class="btn btn-success">Agregar</button>
