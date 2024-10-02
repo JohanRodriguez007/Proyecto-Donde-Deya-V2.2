@@ -17,8 +17,14 @@ require_once '../modelo/Utils.php'; // Ajusta la ruta según sea necesario
 $conn = Utils::conexion();
 
 try {
-    // Obtener el ID del pedido desde la solicitud POST
-    $pedido_id = $_POST['pedido_id'];
+    // Obtener el ID del pedido y la acción (aprobar o rechazar) desde la solicitud POST
+    $pedido_id = isset($_POST['pedido_id']) ? $_POST['pedido_id'] : null;
+    $accion = isset($_POST['accion']) ? $_POST['accion'] : null;
+
+    // Verificar que el pedido_id y la acción son válidos
+    if (!$pedido_id || !$accion) {
+        throw new Exception('ID del pedido o acción no válidos.');
+    }
 
     // Comenzar la transacción
     $conn->beginTransaction();
@@ -31,12 +37,34 @@ try {
     $stmt->execute([$pedido_id]);
     $pedido = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Actualizar el estado del pedido en la base de datos
-    $sql = "UPDATE pedidos SET estado = 'Aprobado' WHERE pedido_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$pedido_id]);
+    if (!$pedido) {
+        throw new Exception('Pedido no encontrado.');
+    }
 
-    // Obtener detalles de los productos
+    // Verificar si la acción es aprobar o rechazar el pedido
+    if ($accion === 'aprobar') {
+        // Actualizar el estado del pedido a 'Aprobado'
+        $sql = "UPDATE pedidos SET estado = 'Aprobado' WHERE pedido_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$pedido_id]);
+
+        $asunto = 'Tu Pedido ha sido Aprobado';
+        $mensaje = "<h2>Estimado/a {$pedido['usuario_nombre']},</h2>
+                    <p>Tu pedido ha sido aprobado y está en camino.</p>";
+    } elseif ($accion === 'rechazar') {
+        // Actualizar el estado del pedido a 'Rechazado'
+        $sql = "UPDATE pedidos SET estado = 'Rechazado' WHERE pedido_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$pedido_id]);
+
+        $asunto = 'Tu Pedido ha sido Rechazado';
+        $mensaje = "<h2>Estimado/a {$pedido['usuario_nombre']},</h2>
+                    <p>Lamentamos informarte que tu pedido ha sido rechazado.</p>";
+    } else {
+        throw new Exception('Acción no válida.');
+    }
+
+    // Obtener detalles de los productos del pedido
     $sql_detalle = "SELECT pd.producto_id, pr.producto_nombre, pd.cantidad, pd.total, pr.producto_foto
                     FROM detalle_pedido pd
                     JOIN producto pr ON pd.producto_id = pr.producto_id
@@ -45,9 +73,6 @@ try {
     $stmt_detalle->execute([$pedido_id]);
     $detalles = $stmt_detalle->fetchAll(PDO::FETCH_ASSOC);
 
-    // ** Se eliminó la sección de actualización de stock aquí **
-    // se eliminó la inserción en ventas ya que el trigger lo hace, duh
-
     // Confirmar la transacción
     $conn->commit();
 
@@ -55,7 +80,7 @@ try {
     $mail = new PHPMailer(true);
 
     try {
-        $mail->SMTPDebug = SMTP::DEBUG_OFF; 
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -68,9 +93,8 @@ try {
         $mail->addAddress($pedido['usuario_email']);
 
         $mail->isHTML(true);
-        $mail->Subject = 'Tu Pedido ha sido Aprobado';
-        $mail->Body = "<h2>Estimado/a {$pedido['usuario_nombre']},</h2>
-                       <p>Tu pedido ha sido aprobado y está en camino.</p>
+        $mail->Subject = $asunto;
+        $mail->Body = $mensaje . "
                        <h3>Detalles del Pedido:</h3>
                        <p><strong>Dirección:</strong> {$pedido['direccion']}</p>
                        <p><strong>Método de Pago:</strong> {$pedido['metodo_pago']}</p>
@@ -98,12 +122,13 @@ try {
 } catch (Exception $e) {
     // Si algo falla, deshacer la transacción
     $conn->rollBack();
-    echo 'Error al aprobar el pedido: ' . $e->getMessage();
+    echo 'Error al procesar el pedido: ' . $e->getMessage();
 }
 
 // Finalizar el almacenamiento en búfer de salida
 ob_end_flush();
 ?>
+
 
 
 

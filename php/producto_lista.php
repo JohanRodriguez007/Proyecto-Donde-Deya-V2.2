@@ -7,13 +7,31 @@ $tabla = "";
 $campos = "producto.producto_id, producto.producto_codigo, producto.producto_nombre, producto.producto_precio, producto.producto_stock, producto.producto_foto, producto.categoria_id, producto.usuario_id, categoria.categoria_id, categoria.categoria_nombre, usuario.usuario_id, usuario.usuario_nombre, usuario.usuario_apellido";
 
 if (isset($busqueda) && $busqueda != "") {
-    $consulta_datos = "SELECT $campos FROM producto INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id INNER JOIN usuario ON producto.usuario_id=usuario.usuario_id WHERE producto.producto_codigo LIKE '%$busqueda%' OR producto.producto_nombre LIKE '%$busqueda%' ORDER BY producto.producto_nombre ASC LIMIT $inicio, $registros";
-    $consulta_total = "SELECT COUNT(producto_id) FROM producto WHERE producto_codigo LIKE '%$busqueda%' OR producto_nombre LIKE '%$busqueda%'";
+    $consulta_datos = "SELECT $campos FROM producto 
+        INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id 
+        INNER JOIN usuario ON producto.usuario_id=usuario.usuario_id 
+        WHERE producto.producto_codigo LIKE '%$busqueda%' 
+        OR producto.producto_nombre LIKE '%$busqueda%' 
+        ORDER BY producto.producto_nombre ASC 
+        LIMIT $inicio, $registros";
+    $consulta_total = "SELECT COUNT(producto_id) FROM producto 
+        WHERE producto_codigo LIKE '%$busqueda%' 
+        OR producto_nombre LIKE '%$busqueda%'";
 } elseif ($categoria_id > 0) {
-    $consulta_datos = "SELECT $campos FROM producto INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id INNER JOIN usuario ON producto.usuario_id=usuario.usuario_id WHERE producto.categoria_id='$categoria_id' ORDER BY producto.producto_nombre ASC LIMIT $inicio, $registros";
-    $consulta_total = "SELECT COUNT(producto_id) FROM producto WHERE categoria_id='$categoria_id'";
+    $consulta_datos = "SELECT $campos FROM producto 
+        INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id 
+        INNER JOIN usuario ON producto.usuario_id=usuario.usuario_id 
+        WHERE producto.categoria_id='$categoria_id' 
+        ORDER BY producto.producto_nombre ASC 
+        LIMIT $inicio, $registros";
+    $consulta_total = "SELECT COUNT(producto_id) FROM producto 
+        WHERE categoria_id='$categoria_id'";
 } else {
-    $consulta_datos = "SELECT $campos FROM producto INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id INNER JOIN usuario ON producto.usuario_id=usuario.usuario_id ORDER BY producto.producto_nombre ASC LIMIT $inicio, $registros";
+    $consulta_datos = "SELECT $campos FROM producto 
+        INNER JOIN categoria ON producto.categoria_id=categoria.categoria_id 
+        INNER JOIN usuario ON producto.usuario_id=usuario.usuario_id 
+        ORDER BY producto.producto_nombre ASC 
+        LIMIT $inicio, $registros";
     $consulta_total = "SELECT COUNT(producto_id) FROM producto";
 }
 
@@ -50,9 +68,9 @@ if ($total >= 1 && $pagina <= $Npaginas) {
                       </p>
                     </div>
                     <div class="has-text-right">
-                        <a href="index.php?vista=product_img&product_id_up=' . $rows['producto_id'] . '" class="button is-link is-rounded is-small">Imagen</a>
-                        <a href="index.php?vista=product_update&product_id_up=' . $rows['producto_id'] . '" class="button is-success is-rounded is-small">Actualizar</a>
-                        <a href="' . $url . $pagina . '&product_id_del=' . $rows['producto_id'] . '" class="button is-danger is-rounded is-small">Eliminar</a>
+                        <a href="index.php?vista=product_img&product_id_up=' . $rows['producto_id'] . '" class="button is-link is-rounded is-small is-responsive">Imagen</a>
+                        <a href="index.php?vista=product_update&product_id_up=' . $rows['producto_id'] . '" class="button is-success is-rounded is-small is-responsive">Actualizar</a>
+                        <a href="' . $url . $pagina . '&product_id_del=' . $rows['producto_id'] . '" class="button is-danger is-rounded is-small is-responsive">Eliminar</a>
                     </div>
                 </div>
             </article>
@@ -84,3 +102,4 @@ if ($total >= 1 && $pagina <= $Npaginas) {
     echo Utils::paginador_tablas($pagina, $Npaginas, $url, 7); // Usar la función de paginador del modelo
 }
 ?>
+
