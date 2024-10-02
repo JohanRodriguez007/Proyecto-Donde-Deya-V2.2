@@ -3,7 +3,7 @@
     <h2 class="subtitle">Lista de productos</h2>
 </div>
 
-<div class="container pb-6 pt-6">
+<div class="container pb-6 pt-6 has-background-white custom-container">
     <?php
              require_once "./modelo/Utils.php"; // Incluir archivo de utilidades
              $conn = Utils::conexion(); // Instanciar la conexión

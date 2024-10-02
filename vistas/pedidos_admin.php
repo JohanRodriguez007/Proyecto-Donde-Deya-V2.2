@@ -2,7 +2,6 @@
 // Incluir archivo de conexión
 require_once "./modelo/Utils.php"; // Incluir archivo de utilidades
 
-
 // Obtener la conexión PDO
 $conn = Utils::conexion(); // Instanciar la conexión
 
@@ -41,7 +40,6 @@ try {
     exit();
 }
 ?>
-
 
 <body>
     <div class="container custom-container">
@@ -84,7 +82,11 @@ try {
                             <td>
                                 <form method="post" action="./php/aprobar_pedido.php">
                                     <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
-                                    <button type="submit" class="button is-success">Aprobar Pedido</button>
+                                    <button type="submit" name="accion" value="aprobar" class="button is-success">Aprobar Pedido</button>
+                                </form>
+                                <form method="post" action="./php/aprobar_pedido.php">
+                                    <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
+                                    <button type="submit" name="accion" value="rechazar" class="button is-danger">Rechazar Pedido</button>
                                 </form>
                             </td>
                         </tr>
@@ -101,6 +103,7 @@ try {
     <?php require_once "./inc/footer.php"; ?>
 </body>
 </html>
+
 
 
 
