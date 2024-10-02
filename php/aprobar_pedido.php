@@ -60,6 +60,30 @@ try {
         $asunto = 'Tu Pedido ha sido Rechazado';
         $mensaje = "<h2>Estimado/a {$pedido['usuario_nombre']},</h2>
                     <p>Lamentamos informarte que tu pedido ha sido rechazado.</p>";
+
+        // Obtener detalles de los productos del pedido para restablecer el stock
+        $sql_detalle = "SELECT pd.producto_id, pd.cantidad FROM detalle_pedido pd
+                        WHERE pd.pedido_id = ?";
+        $stmt_detalle = $conn->prepare($sql_detalle);
+        $stmt_detalle->execute([$pedido_id]);
+        $detalles = $stmt_detalle->fetchAll(PDO::FETCH_ASSOC);
+
+        // Restablecer el stock de los productos
+        foreach ($detalles as $detalle) {
+            // Obtener el stock actual del producto
+            $sql_stock = "SELECT producto_stock FROM producto WHERE producto_id = ?";
+            $stmt_stock = $conn->prepare($sql_stock);
+            $stmt_stock->execute([$detalle['producto_id']]);
+            $producto = $stmt_stock->fetch(PDO::FETCH_ASSOC);
+
+            // Calcular el nuevo stock
+            $nuevo_stock = $producto['producto_stock'] + $detalle['cantidad'];
+
+            // Actualizar el stock del producto
+            $sql_update_stock = "UPDATE producto SET producto_stock = ? WHERE producto_id = ?";
+            $stmt_update_stock = $conn->prepare($sql_update_stock);
+            $stmt_update_stock->execute([$nuevo_stock, $detalle['producto_id']]);
+        }
     } else {
         throw new Exception('Acción no válida.');
     }
@@ -128,6 +152,7 @@ try {
 // Finalizar el almacenamiento en búfer de salida
 ob_end_flush();
 ?>
+
 
 
 
