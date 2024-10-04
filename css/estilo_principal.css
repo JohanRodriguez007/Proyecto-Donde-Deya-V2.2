@@ -192,14 +192,44 @@ li a.active, a:hover {
     box-sizing: border-box;
 }
 
-/* Background images */
+/* Estilos para el primer slider */
 .primer-slide {
-    background-image: url(./BIENVENIDO\ A\ DONDE\ DEYA.png);
-    background-repeat: no-repeat;
-    background-position: top;
-    background-size: cover;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #d4af37; /* Color dorado de fondo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Contenedor del texto con fondo negro */
+.text-container {
+    background: rgba(0, 0, 0, 0.8); /* Fondo negro semitransparente */
+    padding: 20px 40px; /* Padding mejorado */
+    border-radius: 15px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Sombra alrededor del contenedor */
+}
+
+/* Título del slider */
+.primer-slide h1 {
+    font-size: 4rem; /* Tamaño de fuente grande */
+    color: #fff; /* Color blanco para el texto */
+    text-align: center;
+    margin: 0;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8); /* Sombra del texto */
+    animation: moveIn 1s ease-out; /* Animación de entrada */
+}
+
+/* Keyframes para el movimiento de entrada */
+@keyframes moveIn {
+    0% { transform: translateY(-30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+
+
+/* Styles for the other slides */
 .segundo-slide {
     background-color: #333; /* Background color for the second slide */
 }
@@ -209,7 +239,7 @@ li a.active, a:hover {
 }
 
 /* Text styles for the slides */
-.primer-slide h1, .segundo-slide h1, .tercer-slide h1 {
+.segundo-slide h1, .tercer-slide h1 {
     font-size: 3rem;
     text-align: center;
     margin: 0;
@@ -352,7 +382,6 @@ li a.active, a:hover {
     line-height: 1.5;
 }
 
-
 /* Slider transition */
 .slider input:nth-child(1):checked ~ .content-slider {
     left: 0;
@@ -365,7 +394,6 @@ li a.active, a:hover {
 .slider input:nth-child(3):checked ~ .content-slider {
     left: -200vw;
 }
-
 
 .container-icon{
     display: flex;
@@ -820,6 +848,8 @@ border-radius: 50%;
         width: 95%;
     }
 }
+
+
 
 
 
