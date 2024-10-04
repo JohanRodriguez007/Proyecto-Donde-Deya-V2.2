@@ -114,7 +114,7 @@ if ($formulario_visible) {
 
 <!-- Formulario de dirección con múltiples campos para Bogotá -->
 <form method="post" class="container mt-4">
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="tipo_via">Tipo de Vía:</label>
         <select name="tipo_via" id="tipo_via" class="form-control" required>
             <option value="Calle">Calle</option>
@@ -125,18 +125,24 @@ if ($formulario_visible) {
         </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="numero_via_principal">Número principal:</label>
         <input type="text" name="numero_via_principal" id="numero_via_principal" class="form-control" required>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="numero_via_secundaria">Número</label>
-        <input type="text" name="numero_via_secundaria" id="numero_via_secundaria" class="form-control" required>
-        <input type="text" name="numero_via_complemento" id="numero_via_complemento" class="form-control" required>
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <input type="text" name="numero_via_secundaria" id="numero_via_secundaria" class="form-control" required>
+            </div>
+            <div class="col-md-3 mb-3">
+                <input type="text" name="numero_via_complemento" id="numero_via_complemento" class="form-control" required>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="localidad">Localidad:</label>
         <select name="localidad" id="localidad" class="form-control" required>
             <option value="Chapinero">Chapinero</option>
@@ -149,19 +155,17 @@ if ($formulario_visible) {
         </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="barrio">Barrio:</label>
         <input type="text" name="barrio" id="barrio" class="form-control" required>
     </div>
 
-    <div class="form-group">
-        <label for="torre">Detalles Adicionales</label>
+    <div class="form-group mb-3">
+        <label for="detalles">Detalles Adicionales:</label>
         <input type="text" name="detalles" id="detalles" class="form-control" required>
     </div>
 
-  
-
-    <div class="form-group">
+    <div class="form-group mb-3">
         <label for="metodo_pago">Método de Pago:</label>
         <select name="metodo_pago" id="metodo_pago" class="form-control" required>
             <option value="Transferencia Nequi">Transferencia Nequi</option>
@@ -171,6 +175,7 @@ if ($formulario_visible) {
 
     <button type="submit" class="btn btn-primary">Realizar Pedido</button>
 </form>
+
 
 <?php
 }

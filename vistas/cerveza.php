@@ -76,15 +76,12 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
                         <p class="card-text">$<?php echo number_format($precio, 3); ?></p>
                         <p class="card-text">Unidades Disponibles: <?php echo $stock; ?></p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <a href="descripción-producto.php?id=<?php echo $producto_id; ?>" class="btn btn-primary">Detalles</a>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <form method="post" action="php/agregar_carrito.php">
-                                    <input type="hidden" name="vista_actual" value="cerveza">
-                                    <input type="hidden" name="producto_id" value="<?php echo $row['producto_id']; ?>">
-                                    <input type="number" name="cantidad" min="1" max="<?php echo $row['producto_stock']; ?>" value="1" required>
-                                    <button type="submit" class="btn btn-success">Agregar</button>
+                        <div class="d-flex justify-content-center align-items-center">
+                                <form method="post" action="php/agregar_carrito.php" class="d-flex">
+                                        <input type="hidden" name="vista_actual" value="cerveza">
+                                        <input type="hidden" name="producto_id" value="<?php echo $row['producto_id']; ?>">
+                                        <input type="number" name="cantidad" min="1" max="<?php echo $row['producto_stock']; ?>" value="1" required class="form-control mx-2" style="width: 80px;">
+                                        <button type="submit" class="btn btn-success">Agregar al Carrito</button>
                                 </form>
                             </div>
                         </div>

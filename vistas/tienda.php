@@ -39,12 +39,11 @@ $usuarioLogueado = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : null;
             <label for="slide-tres"></label>
         </div>
 
-        <!-- Slider content -->
         <div class="content-slider">
-            <!-- First slide (Keep as is) -->
-            <div class="primer-slide">
-                <h1></h1>
+            <div class="primer-slide text-container">
+                <h1>¡Bienvenido a Donde Deya!</h1>
             </div>
+
             
             <div class="segundo-slide">
     <div class="product-info">

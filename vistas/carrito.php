@@ -106,7 +106,7 @@ $prev_page = isset($_SESSION['prev_page']) ? $_SESSION['prev_page'] : 'index.php
                                 <form method="post" action="./php/aumentar_cantidad.php" style="display: inline;">
                                     <input type="hidden" name="producto_id" value="' . htmlspecialchars($producto_id) . '"> <!-- Enviar producto_id -->
                                     <input type="hidden" name="vista_actual" value="carrito">
-                                    <button type="submit" class="btn btn-warning">Aumentar</button>
+                                    <button type="submit" class="btn btn-success text-white" style="font-size: 1rem;">+</button>
                                 </form>
                               </td>';
                         echo '</tr>';
