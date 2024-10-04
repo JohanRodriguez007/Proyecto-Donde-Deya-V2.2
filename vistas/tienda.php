@@ -40,10 +40,11 @@ $usuarioLogueado = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : null;
         </div>
 
         <div class="content-slider">
-            <div class="primer-slide text-container">
+        <div class="primer-slide">
+            <div class="text-container">
                 <h1>¡Bienvenido a Donde Deya!</h1>
             </div>
-
+    </div>
             
             <div class="segundo-slide">
     <div class="product-info">
