@@ -50,7 +50,7 @@ if ($total >= 1 && $pagina <= $Npaginas) {
     $pag_inicio = $inicio + 1;
     foreach ($datos as $rows) {
         $tabla .= '
-            <article class="media">
+            <div class="media pb-6 pt-6 has-background-white custom-container">
                 <figure class="media-left">
                     <p class="image is-64x64">';
                     if (is_file("./img/producto/" . $rows['producto_foto'])) {
@@ -73,7 +73,7 @@ if ($total >= 1 && $pagina <= $Npaginas) {
                         <a href="' . $url . $pagina . '&product_id_del=' . $rows['producto_id'] . '" class="button is-danger is-rounded is-small is-responsive">Eliminar</a>
                     </div>
                 </div>
-            </article>
+            </div>
             <hr>';
         $contador++;
     }
