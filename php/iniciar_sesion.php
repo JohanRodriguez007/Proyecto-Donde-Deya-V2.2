@@ -53,6 +53,9 @@ if ($check_user->rowCount() == 1) {
         $_SESSION['apellido'] = $check_user['usuario_apellido'];
         $_SESSION['usuario'] = $check_user['usuario_usuario'];
 
+        // Obtener la vista actual del formulario
+        $vista_actual = isset($_POST['vista_actual']) ? $_POST['vista_actual'] : 'home';
+
         // Verificar si es administrador o cliente
         if ($check_user['usuario_rol'] == 1) { // Administrador
             if (headers_sent()) {
@@ -61,10 +64,11 @@ if ($check_user->rowCount() == 1) {
                 header("Location: index.php?vista=home");
             }
         } else { // Cliente
+            // Redirigir a la vista actual en lugar de la tienda
             if (headers_sent()) {
-                echo "<script> window.location.href='index.php?vista=tienda'; </script>";
+                echo "<script> window.location.href='index.php?vista=$vista_actual'; </script>";
             } else {
-                header("Location: index.php?vista=tienda");
+                header("Location: index.php?vista=$vista_actual");
             }
         }
 
@@ -80,9 +84,10 @@ if ($check_user->rowCount() == 1) {
     echo '
         <div class="message_error">
             <strong>¡Ocurrio un error inesperado!</strong><br>
-           <p style="color:red;">Usuario o clave incorrectos</p>
+            <p style="color:red;">Usuario o clave incorrectos</p>
         </div>
     ';
 }
 $check_user = null;
 ?>
+
