@@ -14,7 +14,6 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
 
 <div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
     <?php if ($usuarioLogueado): ?>
-        <!-- Recuadro oculto que se muestra al pasar el mouse -->
         <div class="user-info">
             <span class="me-2">Bienvenido, <?php echo htmlspecialchars($usuarioLogueado); ?></span>
             <div class="user-menu">
@@ -23,11 +22,45 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
         </div>
         <a href="index.php?vista=carrito" class="btn btn-primary btn-sm rounded shadow">Carrito</a>
     <?php else: ?>
-        <!-- Mostrar los botones de login y registro si no está logueado -->
-        <a href="index.php?vista=login" class="btn btn-primary btn-sm me-2 rounded shadow">Iniciar Sesión</a>
+        <button class="btn btn-primary btn-sm me-2 rounded shadow" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar Sesión</button>
         <a href="index.php?vista=customer_new" class="btn btn-primary btn-sm me-2 rounded shadow">Registrarse</a>
     <?php endif; ?>
 </div>
+
+<!-- Modal de inicio de sesión -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST" autocomplete="off">
+                    <input type="hidden" name="vista_actual" value="<?php echo isset($_GET['vista']) ? htmlspecialchars($_GET['vista']) : 'tienda'; ?>">
+                    <div class="mb-3">
+                        <label for="login_usuario" class="form-label">Usuario</label>
+                        <input type="text" class="form-control" id="login_usuario" name="login_usuario" pattern="[a-zA-Z0-9]{4,20}" maxlength="20" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="login_clave" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="login_clave" name="login_clave" pattern="[a-zA-Z0-9$@.-]{7,100}" maxlength="100" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                    </div>
+                    <?php
+                    if (isset($_POST['login_usuario']) && isset($_POST['login_clave'])) {
+                        require_once "./modelo/Utils.php"; // Cargar Utils para usar la función de conexión
+                        require_once "./php/iniciar_sesion.php"; // Incluir el archivo que maneja el inicio de sesión
+                    }
+                    ?>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <main>
 <div class="container">
@@ -57,21 +90,32 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
             ?>
             <div class="col">
                 <div class="card shadow-sm">
-                    <img src="<?php echo $imagen; ?>" alt="<?php echo $nombre; ?>">
+                    <img src="<?php echo $imagen; ?>" alt="<?php echo $nombre; ?>" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title"><?php echo $nombre; ?></h5>
                         <p class="card-text">$<?php echo number_format($precio, 3); ?></p>
                         <p class="card-text">Unidades Disponibles: <?php echo $stock; ?></p>
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <form method="post" action="php/agregar_carrito.php" class="d-flex">
-                                        <input type="hidden" name="vista_actual" value="whiskey">
-                                        <input type="hidden" name="producto_id" value="<?php echo $row['producto_id']; ?>">
-                                        <input type="number" name="cantidad" min="1" max="<?php echo $row['producto_stock']; ?>" value="1" required class="form-control mx-2" style="width: 80px;">
-                                        <button type="submit" class="btn btn-success">Agregar al Carrito</button>
+                        <div class="d-flex justify-content-center align-items-center">
+                                <form method="post" action="php/agregar_carrito.php" class="d-flex" onsubmit="return verificarLogin();">
+                                    <input type="hidden" name="vista_actual" value="vinos">
+                                    <input type="hidden" name="producto_id" value="<?php echo $row['producto_id']; ?>">
+                                    <input type="number" name="cantidad" min="1" max="<?php echo $row['producto_stock']; ?>" value="1" required class="form-control mx-2" style="width: 80px;">
+                                    <button type="submit" class="btn btn-success">Agregar al Carrito</button>
                                 </form>
-                            </div>
+                                <script>
+                                    function verificarLogin() {
+                                        if (!<?php echo json_encode($usuarioLogueado); ?>) {
+                                            // Mostrar el modal si el usuario no está logueado
+                                            var myModal = new bootstrap.Modal(document.getElementById('loginModal'));
+                                            myModal.show();
+                                            return false; // Evitar el envío del formulario
+                                        }
+                                        return true; // Permitir el envío del formulario
+                                    }
+                                </script>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
