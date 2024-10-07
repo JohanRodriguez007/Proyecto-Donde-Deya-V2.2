@@ -1,6 +1,6 @@
-<?php require_once "./inc/header.php"; ?>
-
-<?php
+<?php 
+require_once "./inc/header.php"; 
+require_once './modelo/Utils.php'; // Aseguramos que se incluya la clase Utils
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -23,6 +23,11 @@ function validar_email(string $texto): bool
     return filter_var($texto, FILTER_VALIDATE_EMAIL);
 }
 
+function validar_primera_mayuscula(string $texto): bool
+{
+    return ctype_upper(substr($texto, 0, 1));
+}
+
 //-----------------------------------------------------
 // Variables
 //-----------------------------------------------------
@@ -33,7 +38,7 @@ $usuario = isset($_REQUEST['usuario']) ? $_REQUEST['usuario'] : '';
 $email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
 $password = isset($_REQUEST['password']) ? $_REQUEST['password'] : '';
 
-// Comprobamos si nos llega los datos por POST
+// Comprobamos si nos llegan los datos por POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //-----------------------------------------------------
@@ -41,70 +46,58 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //-----------------------------------------------------
     // Email
     if (!validar_requerido($email)) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>Campo Email obligatorio.</strong><br>
-                El usuario no existe en el sistema
-            </div>
-        ';
+        $errores[] = 'Campo Email obligatorio.';
     }
 
     if (!validar_email($email)) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>El campo Email no tiene un formato válido.</strong><br>
-            </div>
-        ';
+        $errores[] = 'El campo Email no tiene un formato válido.';
     }
 
     // Nombre
     if (!validar_requerido($nombre)) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>El campo Nombre es Obligatorio.</strong><br>
-            </div>
-        ';
+        $errores[] = 'El campo Nombre es Obligatorio.';
     }
 
     // Apellido
     if (!validar_requerido($apellido)) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>El campo Apellido es Obligatorio.</strong><br>
-            </div>
-        ';
+        $errores[] = 'El campo Apellido es Obligatorio.';
     }
 
     // Usuario
     if (!validar_requerido($usuario)) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>El campo Usuario es Obligatorio.</strong><br>
-            </div>
-        ';
+        $errores[] = 'El campo Usuario es Obligatorio.';
+    } elseif (!validar_primera_mayuscula($usuario)) {
+        $errores[] = 'El nombre de usuario debe comenzar con una letra mayúscula.';
     }
 
     // Contraseña
     if (!validar_requerido($password)) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>El campo Contraseña es Obligatorio.</strong><br>
-            </div>
-        ';
+        $errores[] = 'El campo Contraseña es Obligatorio.';
     }
 
     /* Verificar que no existe en la base de datos el mismo email */
-    // Conecta con base de datos
-    $BD ='bd_donde_deya';
-    $miPDO = new PDO("mysql:host=127.0.0.1; dbname=$BD;", 'root', '');
+    // Conecta con base de datos usando la clase Utils
+    $conn = Utils::conexion(); // Usar la función de conexión
+
     // Cuenta cuantos emails existen
-    $miConsulta = $miPDO->prepare('SELECT COUNT(*) as length FROM usuario WHERE usuario_email = :email;');
-    // Ejecuta la busqueda
-    $miConsulta->execute([
-        'email' => $email
-    ]);
+    $miConsulta = $conn->prepare('SELECT COUNT(*) as length FROM usuario WHERE usuario_email = :email;');
+    // Ejecuta la búsqueda
+    $miConsulta->execute(['email' => $email]);
     // Recoge los resultados
     $resultado = $miConsulta->fetch();
+
     // Comprueba si existe
     if ((int) $resultado['length'] > 0) {
-        $errores[] = '<div class="notification is-danger is-light">
-                <strong>La dirección de Email ya está registrada</strong><br>
-            </div>
-        ';
+        $errores[] = 'La dirección de Email ya está registrada';
+    }
+
+    // Validar que el usuario no existe (sin sensibilidad a mayúsculas)
+    $miConsultaUsuario = $conn->prepare('SELECT COUNT(*) as length FROM usuario WHERE BINARY usuario_usuario = :usuario;');
+    $miConsultaUsuario->execute(['usuario' => $usuario]);
+    $resultadoUsuario = $miConsultaUsuario->fetch();
+    
+    if ((int) $resultadoUsuario['length'] > 0) {
+        $errores[] = 'El nombre de usuario ya está en uso.';
     }
 
     //-----------------------------------------------------
@@ -115,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Prepara INSERT
         $token = bin2hex(openssl_random_pseudo_bytes(16));
-        $miNuevoRegistro = $miPDO->prepare('INSERT INTO usuario (usuario_nombre, usuario_apellido, usuario_usuario, usuario_email, usuario_clave, usuario_rol, usuario_activo, usuario_token) VALUES (:nombre, :apellido, :usuario, :email, :password, :rol, :activo, :token);');
+        $miNuevoRegistro = $conn->prepare('INSERT INTO usuario (usuario_nombre, usuario_apellido, usuario_usuario, usuario_email, usuario_clave, usuario_rol, usuario_activo, usuario_token) VALUES (:nombre, :apellido, :usuario, :email, :password, :rol, :activo, :token);');
         // Ejecuta el nuevo registro en la base de datos
         $miNuevoRegistro->execute([
             'nombre' => $nombre,
@@ -163,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo 'Mensaje: ' . $mail->ErrorInfo;
         }
 
-        /* Redirección a login.php con GET para informar del envio del email */
+        /* Redirección a login.php con GET para informar del envío del email */
         header('Location: index.php?vista=login');
         die();
     }
@@ -231,4 +224,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 <?php require_once "./inc/footer.php"; ?>
+
+
+
+
 

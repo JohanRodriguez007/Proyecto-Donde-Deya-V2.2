@@ -1,8 +1,10 @@
 <?php
 require_once "./inc/header.php";
 
+// Incluir el archivo Utils para la conexión a la base de datos
+require_once './modelo/Utils.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require './PHPMailer/src/PHPMailer.php';
@@ -22,12 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if (count($errores) === 0) {
-        // Conexión a la base de datos
-        $BD = 'bd_donde_deya';
-        $miPDO = new PDO("mysql:host=127.0.0.1; dbname=$BD;", 'root', '');
+        // Conexión a la base de datos usando Utils
+        $conn = Utils::conexion();
         
         // Comprobar si el email existe en la base de datos
-        $miConsulta = $miPDO->prepare('SELECT COUNT(*) as length FROM usuario WHERE usuario_email = :email;');
+        $miConsulta = $conn->prepare('SELECT COUNT(*) as length FROM usuario WHERE usuario_email = :email;');
         $miConsulta->execute(['email' => $email]);
         $resultado = $miConsulta->fetch();
 
@@ -39,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $expiration = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
             // Actualizar el token y la fecha de expiración en la base de datos
-            $miActualizacion = $miPDO->prepare('UPDATE usuario SET usuario_token = :token, usuario_token_expiration = :expiration WHERE usuario_email = :email;');
+            $miActualizacion = $conn->prepare('UPDATE usuario SET usuario_token = :token, usuario_token_expiration = :expiration WHERE usuario_email = :email;');
             $miActualizacion->execute([
                 'token' => $token,
                 'expiration' => $expiration,
@@ -115,5 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 <?php require_once "./inc/footer.php"; ?>
+
 
 

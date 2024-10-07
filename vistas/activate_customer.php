@@ -1,8 +1,10 @@
 <?php require_once "./inc/header.php"; ?>
 <?php
-// Configuración de la base de datos
-$BD = 'bd_donde_deya';
-$miPDO = new PDO("mysql:host=127.0.0.1; dbname=$BD;", 'root', '');
+// Incluir el archivo Utils para la conexión a la base de datos
+require_once './modelo/Utils.php';
+
+// Establecer la conexión a la base de datos usando la clase Utils
+$conn = Utils::conexion();
 
 // Obtener parámetros de la URL
 $email = isset($_GET['email']) ? $_GET['email'] : '';
@@ -18,7 +20,7 @@ $email = urldecode($email);
 $token = urldecode($token);
 
 // Preparar consulta para verificar el usuario con el email y el token
-$miConsulta = $miPDO->prepare('
+$miConsulta = $conn->prepare('
     SELECT * FROM usuario
     WHERE usuario_email = :email AND usuario_token = :token AND usuario_activo = 0
 ');
@@ -30,7 +32,7 @@ $usuario = $miConsulta->fetch(PDO::FETCH_ASSOC);
 
 if ($usuario) {
     // Activar la cuenta
-    $miActualizar = $miPDO->prepare('
+    $miActualizar = $conn->prepare('
         UPDATE usuario
         SET usuario_activo = 1
         WHERE usuario_email = :email AND usuario_token = :token
@@ -41,18 +43,19 @@ if ($usuario) {
     ]);
     
     echo '
-            <div class="notification is-info is-light">
-                <strong>¡Estimado usuario, su cuenta se ha activado con éxito!</strong><br>
-            </div>
-        ';
+        <div class="notification is-info is-light">
+            <strong>¡Estimado usuario, su cuenta se ha activado con éxito!</strong><br>
+        </div>
+    ';
 
 } else {
     echo '
-            <div class="notification is-danger is-light">
-                <strong>Parametros Invalidos o cuenta ya activada</strong><br>
-            </div>
-        ';
+        <div class="notification is-danger is-light">
+            <strong>Parámetros inválidos o cuenta ya activada</strong><br>
+        </div>
+    ';
 }
 ?>
 
 <?php require_once "./inc/footer.php"; ?>
+
