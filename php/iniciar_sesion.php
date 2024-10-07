@@ -54,7 +54,7 @@ if ($check_user->rowCount() == 1) {
         $_SESSION['usuario'] = $check_user['usuario_usuario'];
 
         // Obtener la vista actual del formulario
-        $vista_actual = isset($_POST['vista_actual']) ? $_POST['vista_actual'] : 'home';
+        $vista_actual = isset($_POST['vista_actual']) ? $_POST['vista_actual'] : 'tienda';
 
         // Verificar si es administrador o cliente
         if ($check_user['usuario_rol'] == 1) { // Administrador
