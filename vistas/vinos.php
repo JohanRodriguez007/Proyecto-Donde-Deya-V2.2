@@ -49,6 +49,13 @@ $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : 
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Iniciar sesión</button>
                     </div>
+                    <div class="text-center mt-3">
+                    <div class="text-center mt-3">
+                        <p>No tienes cuenta, <a href="index.php?vista=customer_new" class="text-decoration-none text-primary no-hover">aquí</a> para registrarte.</p>
+                        <a href="index.php?vista=recover_password" class="d-block text-decoration-none text-primary no-hover">¿Has olvidado tu contraseña?</a>
+                    </div>
+                    </div>
+
                     <?php
                     if (isset($_POST['login_usuario']) && isset($_POST['login_clave'])) {
                         require_once "./modelo/Utils.php"; // Cargar Utils para usar la función de conexión
