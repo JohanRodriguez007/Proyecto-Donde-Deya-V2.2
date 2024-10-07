@@ -24,7 +24,7 @@ class MainController {
             "product_list", "product_new", "product_search", "product_update",
             "user_list", "user_new", "user_search", "user_update",
             "customer_new", "activate_customer", "carrito", "compra_exitosa",
-            "pedidos", "pedidos_admin", "ventas"
+            "pedidos", "pedidos_admin", "ventas", "recover_password", "reset_password"
         ];
 
         // Verificar si la vista es válida
@@ -33,7 +33,7 @@ class MainController {
         }
 
         // Incluir la barra de navegación si no es la vista de login
-        if ($vista !== "login" && $vista !== "customer_new" && $vista !== "activate_customer" && $vista !== "compra_exitosa") {
+        if ($vista !== "login" && $vista !== "customer_new" && $vista !== "activate_customer" && $vista !== "compra_exitosa" && $vista !== "recover_password" && $vista !== "reset_password") {
             if (in_array($vista, ['tienda', 'cerveza', 'vinos', 'whiskey', 'aguardiente', 'mecato', 'carrito', 'pedidos'])) {
                 include_once "./inc/navbarTienda.php";
             } else {
