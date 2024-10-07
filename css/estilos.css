@@ -114,6 +114,11 @@ li a.active, a:hover {
     transition: .5s;
 }
 
+#loginModal .no-hover:hover {
+    background-color: transparent !important;
+    transition: none !important;
+}
+
 .checkbtn {
     font-size: 30px;
     color: #fff;
