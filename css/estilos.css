@@ -137,15 +137,33 @@ li a.active, a:hover {
     font-family: "Main";
     background-color: #272727;
     padding: 1.5%;
-    font-size: 30px;
-    color: #ffffffd3;
+    font-size: 20px; /* Ajusta el tamaño del texto según sea necesario */
+    color: #ffffff; /* Cambio de color a blanco sólido para mayor visibilidad */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    line-height: 45px;
+    line-height: 1.6;
     margin-top: 35px;
 }
+
+.container-info .text-reset {
+    color: #ffffff !important; /* Blanco sólido para todos los enlaces */
+}
+
+.container-info .fw-bold {
+    color: #ffffff; /* Blanco sólido para textos en negrita */
+}
+
+footer.personal-info .text-muted {
+    color: #ffffff !important; /* Fuerza el color blanco solo para los textos dentro del footer */
+}
+
+footer.personal-info {
+    background-color: #272727 !important; /* Forzar el color de fondo del footer */
+}
+
+
 
 @media screen and (max-width: 1536px) and (max-height: 864px) {
     .card img {

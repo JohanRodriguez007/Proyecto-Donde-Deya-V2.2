@@ -1,0 +1,30 @@
+.row.mt-3 {
+    display: flex;
+    flex-wrap: wrap; /* Permite que los elementos se ajusten en múltiples líneas si es necesario */
+    font-size: 20px; 
+    margin: 25px; /* Espacio alrededor de la fila */
+    color: #ffff;
+}
+
+.col-md-3,
+.col-md-4 {
+    max-width: 35%; /* Ajusta el ancho máximo */
+    padding: 15px 10px 25px 10px; /* Espaciado interno */
+}
+
+@media (max-width: 768px) { /* Ajustes para pantallas pequeñas */
+    .col-md-3,
+    .col-md-4 {
+        max-width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+        text-align: center; /* Centra el texto */
+    }
+    .row.mt-3 {
+        font-size: 18px; /* Ajusta el tamaño de fuente para pantallas pequeñas */
+        margin: 10px; /* Reduce el margen en pantallas pequeñas */
+    }
+}
+
+.text-center {
+    font-size: 25px; /* Tamaño de fuente para el texto centrado */
+    margin-top: 130px
+}
