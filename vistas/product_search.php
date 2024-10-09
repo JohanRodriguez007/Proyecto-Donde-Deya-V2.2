@@ -69,4 +69,4 @@
     ?>
 </div>
 
-<?php require_once "./inc/footer.php"; ?>
+<?php require_once "./inc/footer_V2.php"; ?>

@@ -9,7 +9,7 @@ setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'Spanish_Spain', 'Spanish');
 $conn = Utils::conexion(); // Instanciar la conexión
 
 // Definir el número de registros por página
-$registros = 10; // Cambia esto según tu necesidad
+$registros = 15; // Cambia esto según tu necesidad
 $pagina = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Página actual
 $inicio = ($pagina > 0) ? (($pagina * $registros) - $registros) : 0; // Calcular el inicio
 
@@ -131,7 +131,7 @@ $Npaginas = ceil($total_ventas_count / $registros);
         <?php endif; ?>
     </div>
     
-    <?php require_once "./inc/footer.php"; ?>
+    <?php require_once "./inc/footer_V2.php"; ?>
 </body>
 </html>
 

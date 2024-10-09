@@ -80,7 +80,7 @@ try {
                             </td>
                             <td><?php echo number_format($pedido['total'], 3); ?></td>
                             <td>
-                                <form method="post" action="./php/aprobar_pedido.php">
+                                <form method="post" action="./php/aprobar_pedido.php" style="margin-bottom: 10px;">
                                     <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
                                     <button type="submit" name="accion" value="aprobar" class="button is-success">Aprobar Pedido</button>
                                 </form>
@@ -100,7 +100,7 @@ try {
         <?php endif; ?>
     </div>
 
-    <?php require_once "./inc/footer.php"; ?>
+    <?php require_once "./inc/footer_V2.php"; ?>
 </body>
 </html>
 

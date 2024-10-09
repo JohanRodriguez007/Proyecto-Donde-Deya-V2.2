@@ -1,6 +1,4 @@
 <?php
-// Iniciar sesión
-session_start();
 
 // Destruir la sesión
 session_unset();
