@@ -12,7 +12,8 @@ $mensaje_error = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : '';
 $mensaje_exito = isset($_GET['success']) ? htmlspecialchars($_GET['success']) : '';
 ?>
 
-<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
+<div class="d-flex justify-content-end position-absolute top-0 end-0 m-3 bg-light rounded shadow p-2" 
+     style="right: 10px; top: 10px;">
     <?php if ($usuarioLogueado): ?>
         <div class="user-info">
             <span class="me-2">Bienvenido, <?php echo htmlspecialchars($usuarioLogueado); ?></span>

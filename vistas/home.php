@@ -17,5 +17,5 @@ if (!isset($_SESSION['id']) || !isset($_SESSION['usuario'])) {
     </figure>
   </main>
 </div>
-<?php require_once "./inc/footer.php"; ?>
+<?php require_once "./inc/footer_V2.php"; ?>
 

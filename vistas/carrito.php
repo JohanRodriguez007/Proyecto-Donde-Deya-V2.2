@@ -25,7 +25,8 @@ $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $prev_page = isset($_SESSION['prev_page']) ? $_SESSION['prev_page'] : 'index.php';
 ?>
 
-<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
+<div class="d-flex justify-content-end position-absolute top-0 end-0 m-3 bg-light rounded shadow p-2" 
+     style="right: 10px; top: 10px;">
     <!-- Recuadro de bienvenida solo si el usuario está logueado -->
     <div class="user-info">
         <span class="me-2">Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre']); ?></span>

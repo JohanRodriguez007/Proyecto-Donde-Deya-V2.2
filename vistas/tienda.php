@@ -2,7 +2,8 @@
 $usuarioLogueado = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : null;
 ?>
 
-<div class="d-flex justify-content-end position-fixed top-0 end-0 m-3 bg-light rounded shadow p-2">
+<div class="d-flex justify-content-end position-absolute top-0 end-0 m-3 bg-light rounded shadow p-2" 
+     style="right: 10px; top: 10px;">
     <?php if ($usuarioLogueado): ?>
         <div class="user-info">
             <span class="me-2">Bienvenido, <?php echo htmlspecialchars($usuarioLogueado); ?></span>
@@ -76,6 +77,8 @@ $usuarioLogueado = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : null;
         <div class="content-slider">
             <div class="primer-slide text-container">
                 <h1>¡Bienvenido a Donde Deya!</h1>
+                <img src="./css/imagenes_referencia/tienda.jpg">
+                <p>En la Cigarrería Donde Deya nos enorgullece ofrecer una experiencia única para los amantes de las bebidas y los snacks. Nuestra misión es brindarte los productos de la más alta calidad en un ambiente acogedor y cercano, donde encontrarás todo lo que necesitas para esos momentos especiales.</p>
             </div>
 
             <div class="segundo-slide">
