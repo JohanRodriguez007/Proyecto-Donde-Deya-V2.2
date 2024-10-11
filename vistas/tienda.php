@@ -122,22 +122,17 @@ $usuarioLogueado = isset($_SESSION['nombre']) ? $_SESSION['nombre'] : null;
                     <h1>Contacto</h1>
                     <div class="contact-details">
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="contact-icon">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7z" />
-                            </svg>
-                            <p>Dirección: Calle 127 abis No 90b-30</p>
+                        <p class="text-white"><i class="fas fa-home me-3"></i> Calle 127 abis No 90b-30</p>
                         </div>
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="contact-icon">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
-                            </svg>
-                            <p>Correo: linita5marcelita@gmail.com</p>
+                        <p class="text-white"><i class="fas fa-envelope me-3"></i> linita5marcelita@gmail.com</p>
                         </div>
                         <div class="contact-item">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="contact-icon">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
-                            </svg>
-                            <p>Teléfono: 123456789</p>
+                        <p class="text-white"><i class="fas fa-phone me-3"></i> 314 4851640</p>
+                        </div>
+                        <div class="contact-item">
+                        <i class="fas fa-wallet" style="margin-right: 10px;"></i>
+                        <span>Nequi: 314 4851640</span>
                         </div>
                     </div>
                 </div>
