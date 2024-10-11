@@ -253,6 +253,17 @@ footer.personal-info {
     }
 }
 
+@media (max-width: 380px) { 
+    header h1 {
+        padding-top: 70px;
+        padding-right: 33px;
+    }
+    header img {
+        margin-left: -10px;
+        max-width: 45%;
+    }
+}
+
 
    
 

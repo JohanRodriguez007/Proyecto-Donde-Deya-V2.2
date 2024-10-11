@@ -432,6 +432,77 @@ li a.active, a:hover {
     cursor: pointer;
 }
 
+@media (min-width: 637px) and (max-width: 1084px) {
+    .primer-slide p {
+        max-width: 100%;
+    }
+    .primer-slide h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 637px) {
+    .primer-slide h1 {
+        font-size: 2.5rem;
+    }
+    .primer-slide p {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .primer-slide p {
+        font-size: 13px;
+        max-width: 100%;
+    }
+    .primer-slide h1 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .primer-slide img {
+        max-width: 100%;
+        margin-bottom: -10px;
+    }
+    .primer-slide p {
+        font-size: 17px;
+        max-width: 100%;
+    }
+    .primer-slide h1 {
+        font-size: 25px;
+    }
+    .contact-item p {
+        font-size: 15px;
+    }
+}
+
+
+@media (max-width: 380px) {
+    .primer-slide img {
+        max-width: 100%;
+        margin-bottom: -10px;
+    }
+
+    .primer-slide p {
+        font-size: 15px;
+        max-width: 100%;
+    }
+    .primer-slide h1 {
+        font-size: 20px
+    }
+    .product-info h1 {
+        font-size: 20px
+    }
+    .contact-item p {
+        font-size: 14px;
+    }
+    .product-description {
+        font-size: 14px;
+    }
+}
+
+
 .count-products {
 position: absolute;
 top: 55%;
