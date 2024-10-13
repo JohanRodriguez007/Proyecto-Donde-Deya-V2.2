@@ -277,6 +277,8 @@ li a.active, a:hover {
     position: relative;
     background-size: cover;
     background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Estilos para el contenedor de información del producto */
@@ -353,6 +355,8 @@ li a.active, a:hover {
     text-align: center;
     padding: 30px;
     position: relative;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Estilos para el contenedor de información de contacto */
