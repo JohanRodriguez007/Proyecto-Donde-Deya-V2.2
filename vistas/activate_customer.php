@@ -42,20 +42,25 @@ if ($usuario) {
         'token' => $token
     ]);
     
+    // Notificación de activación exitosa
     echo '
-        <div class="notification is-info is-light">
+        <div class="notification is-success">
             <strong>¡Estimado usuario, su cuenta se ha activado con éxito!</strong><br>
         </div>
+        <a href="index.php?vista=tienda" class="button is-primary mt-3">Regresar a la tienda</a>
     ';
 
 } else {
+    // Notificación de error
     echo '
-        <div class="notification is-danger is-light">
+        <div class="notification is-danger">
             <strong>Parámetros inválidos o cuenta ya activada</strong><br>
         </div>
+        <a href="index.php?vista=tienda" class="button is-primary mt-3">Regresar a la tienda</a>
     ';
 }
 ?>
 
 <?php require_once "./inc/footer.php"; ?>
+
 

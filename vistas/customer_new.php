@@ -38,6 +38,8 @@ $usuario = isset($_REQUEST['usuario']) ? $_REQUEST['usuario'] : '';
 $email = isset($_REQUEST['email']) ? $_REQUEST['email'] : '';
 $password = isset($_REQUEST['password']) ? $_REQUEST['password'] : '';
 
+$registro_exitoso = false; // Variable para controlar si el registro fue exitoso
+
 // Comprobamos si nos llegan los datos por POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -76,17 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     /* Verificar que no existe en la base de datos el mismo email */
-    // Conecta con base de datos usando la clase Utils
     $conn = Utils::conexion(); // Usar la función de conexión
 
-    // Cuenta cuantos emails existen
     $miConsulta = $conn->prepare('SELECT COUNT(*) as length FROM usuario WHERE usuario_email = :email;');
-    // Ejecuta la búsqueda
     $miConsulta->execute(['email' => $email]);
-    // Recoge los resultados
     $resultado = $miConsulta->fetch();
 
-    // Comprueba si existe
     if ((int) $resultado['length'] > 0) {
         $errores[] = 'La dirección de Email ya está registrada';
     }
@@ -105,11 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //-----------------------------------------------------
     if (count($errores) === 0) {
         /* Registro En La Base De Datos */
-
-        // Prepara INSERT
         $token = bin2hex(openssl_random_pseudo_bytes(16));
         $miNuevoRegistro = $conn->prepare('INSERT INTO usuario (usuario_nombre, usuario_apellido, usuario_usuario, usuario_email, usuario_clave, usuario_rol, usuario_activo, usuario_token) VALUES (:nombre, :apellido, :usuario, :email, :password, :rol, :activo, :token);');
-        // Ejecuta el nuevo registro en la base de datos
         $miNuevoRegistro->execute([
             'nombre' => $nombre,
             'apellido' => $apellido,
@@ -122,48 +116,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ]);
 
         /* Envío De Email Con Token */
-
-        // Configuración de PHPMailer
         $mail = new PHPMailer(true);
         try {
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER; // Nivel de depuración
-            $mail->isSMTP(); // Usar SMTP
-            $mail->Host = 'smtp.gmail.com'; // Servidor SMTP
-            $mail->SMTPAuth = true; // Habilitar autenticación SMTP
-            $mail->Username = 'depruebac310@gmail.com'; // Usuario SMTP
-            $mail->Password = 'vjyeitfrmywcqgoz'; // Contraseña SMTP
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Habilitar cifrado TLS
-            $mail->Port = 587; // Puerto TCP para TLS
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'depruebac310@gmail.com';
+            $mail->Password = 'vjyeitfrmywcqgoz';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
 
-            // Remitente y destinatarios
             $mail->setFrom('depruebac310@gmail.com', 'Cigarreria Donde Deya');
             $mail->addAddress($email);
-            
-            // Contenido del correo
+
             $mail->isHTML(true);
             $mail->Subject = 'Active su Usuario';
             $emailEncode = urlencode($email);
             $tokenEncode = urlencode($token);
-            $mail->Body = "
-            Hola!<br>
-            Gracias por registrarte.<br>
-            Para activar tu cuenta, por favor haz clic en el siguiente enlace:<br>
-            <a href='http://localhost/Proyecto-Donde-Deya-V2.2-main/index.php?vista=activate_customer&email=$emailEncode&token=$tokenEncode'>Activar cuenta</a>";
+            $mail->Body = "Hola!<br>Gracias por registrarte.<br>Para activar tu cuenta, por favor haz clic en el siguiente enlace:<br><a href='http://localhost/Proyecto-Donde-Deya-V2.2-main/index.php?vista=activate_customer&email=$emailEncode&token=$tokenEncode'>Activar cuenta</a>";
 
             $mail->send();
-            echo 'Correo enviado';
+            $registro_exitoso = true; // Indicamos que el registro fue exitoso
         } catch (Exception $e) {
-            echo 'Mensaje: ' . $mail->ErrorInfo;
+            $errores[] = 'Error al enviar el correo: ' . $mail->ErrorInfo;
         }
-
-        /* Redirección a login.php con GET para informar del envío del email */
-        header('Location: index.php?vista=login');
-        die();
     }
 }
 ?>
 <body>
     <div class="container mt-5">
+    <?php if ($registro_exitoso): ?>
+    <!-- Notificación de registro exitoso -->
+    <div class="notification is-success">
+        Usuario registrado con éxito, revise su correo para activarlo.
+    </div>
+    <!-- Botón para regresar a la tienda -->
+    <a href="index.php?vista=tienda" class="button is-primary mt-3">Regresar</a>
+<?php endif; ?>
+
         <!-- Mostramos errores por HTML -->
         <?php if (!empty($errores)): ?>
         <div class="notification is-danger">
@@ -174,9 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </ul>
         </div>
         <?php endif; ?>
-        
+
         <!-- Formulario -->
-        <form action="" method="post" class="box">
+        <form action="" method="post" class="box" <?php echo $registro_exitoso ? 'style="display:none;"' : ''; ?>>
             <h2 class="title is-4">Registro</h2>
 
             <div class="field">
@@ -224,6 +214,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 
 <?php require_once "./inc/footer_V2.php"; ?>
+
+
 
 
 
