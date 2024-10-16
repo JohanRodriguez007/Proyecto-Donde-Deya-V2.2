@@ -92,10 +92,15 @@ try {
                 </div>
             </div>
         </form>
+
+        <?php if ($password_restablecida): ?>
+            <a href="index.php?vista=tienda" class="button is-link">Regresar a la tienda</a>
+        <?php endif; ?>
     </div>
 </body>
 
 <?php require_once "./inc/footer_V2.php"; ?>
+
 
 
 

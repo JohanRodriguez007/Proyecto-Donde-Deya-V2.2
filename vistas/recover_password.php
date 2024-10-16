@@ -83,18 +83,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
     <div class="container mt-5">
         <?php if ($correo_enviado): ?>
-            <div class="notification is-success is-light">Correo de recuperación enviado. Por favor, revisa tu bandeja de entrada.</div>
+            <div class="notification is-success is-light">
+                Correo de recuperación enviado. Por favor, revisa tu bandeja de entrada.
+            </div>
+            <a href="index.php?vista=tienda" class="button is-primary mt-3">Regresar a la tienda</a>
         <?php else: ?>
             <?php if (!empty($errores)): ?>
-            <div class="notification is-danger">
-                <ul>
-                    <?php foreach ($errores as $error): ?>
-                        <li><?php echo htmlspecialchars($error); ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
+                <div class="notification is-danger">
+                    <ul>
+                        <?php foreach ($errores as $error): ?>
+                            <li><?php echo htmlspecialchars($error); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
             <?php endif; ?>
-            
+
             <form action="" method="post" class="box">
                 <h2 class="title is-4">Recuperación de Contraseña</h2>
 
@@ -110,12 +113,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <button class="button is-primary" type="submit">Enviar enlace de recuperación</button>
                     </div>
                 </div>
+
+                <!-- Botón de regresar al final del formulario -->
+                <a href="index.php?vista=tienda" class="button is-primary mt-3">Regresar a la tienda</a>
             </form>
         <?php endif; ?>
     </div>
 </body>
 
 <?php require_once "./inc/footer_V2.php"; ?>
+
 
 
 
