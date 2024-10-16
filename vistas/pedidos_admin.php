@@ -6,8 +6,8 @@ require_once "./modelo/Utils.php"; // Incluir archivo de utilidades
 $conn = Utils::conexion(); // Instanciar la conexión
 
 try {
-    // Obtener los pedidos pendientes
-    $sql = "SELECT p.pedido_id, p.usuario_id, u.usuario_nombre, p.direccion, p.metodo_pago, p.fecha_pedido
+    // Obtener los pedidos pendientes, incluyendo el apellido del usuario
+    $sql = "SELECT p.pedido_id, p.usuario_id, u.usuario_nombre, u.usuario_apellido, p.direccion, p.metodo_pago, p.fecha_pedido
             FROM pedidos p
             JOIN usuario u ON p.usuario_id = u.usuario_id
             WHERE p.estado = 'Pendiente'
@@ -46,53 +46,55 @@ try {
         <h1 class="title custom-title">Gestión de Pedidos</h1>
 
         <?php if (count($pedidos) > 0): ?>
-            <table class="table is-striped is-bordered is-hoverable">
-                <thead>
-                    <tr>
-                        <th>Cliente</th>
-                        <th>Dirección</th>
-                        <th>Método de Pago</th>
-                        <th>Fecha del Pedido</th>
-                        <th>Detalles</th>
-                        <th>Total</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($pedidos as $pedido): ?>
+            <div class="table-container"> <!-- Contenedor para hacer la tabla desplazable -->
+                <table class="table is-striped is-bordered is-hoverable is-fullwidth">
+                    <thead>
                         <tr>
-                            <td><?php echo htmlspecialchars($pedido['usuario_nombre']); ?></td>
-                            <td><?php echo htmlspecialchars($pedido['direccion']); ?></td>
-                            <td><?php echo htmlspecialchars($pedido['metodo_pago']); ?></td>
-                            <td><?php echo htmlspecialchars($pedido['fecha_pedido']); ?></td>
-                            <td>
-                                <ul>
-                                    <?php if (isset($pedido['detalle']) && count($pedido['detalle']) > 0): ?>
-                                        <?php foreach ($pedido['detalle'] as $detalle): ?>
-                                            <li>
-                                                <?php echo htmlspecialchars($detalle['producto_nombre']) . " - " . htmlspecialchars($detalle['cantidad']) . " x $" . number_format($detalle['producto_precio'], 2) . " (Total: $" . number_format($detalle['cantidad'] * $detalle['producto_precio'], 3) . ")"; ?>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <li>No hay detalles disponibles.</li>
-                                    <?php endif; ?>
-                                </ul>
-                            </td>
-                            <td><?php echo number_format($pedido['total'], 3); ?></td>
-                            <td>
-                                <form method="post" action="./php/aprobar_pedido.php" style="margin-bottom: 10px;">
-                                    <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
-                                    <button type="submit" name="accion" value="aprobar" class="button is-success">Aprobar Pedido</button>
-                                </form>
-                                <form method="post" action="./php/aprobar_pedido.php">
-                                    <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
-                                    <button type="submit" name="accion" value="rechazar" class="button is-danger">Rechazar Pedido</button>
-                                </form>
-                            </td>
+                            <th>Cliente</th>
+                            <th>Dirección</th>
+                            <th>Método de Pago</th>
+                            <th>Fecha del Pedido</th>
+                            <th>Detalles</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($pedidos as $pedido): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($pedido['usuario_nombre']) . ' ' . htmlspecialchars($pedido['usuario_apellido']); ?></td>
+                                <td><?php echo htmlspecialchars($pedido['direccion']); ?></td>
+                                <td><?php echo htmlspecialchars($pedido['metodo_pago']); ?></td>
+                                <td><?php echo htmlspecialchars($pedido['fecha_pedido']); ?></td>
+                                <td>
+                                    <ul>
+                                        <?php if (isset($pedido['detalle']) && count($pedido['detalle']) > 0): ?>
+                                            <?php foreach ($pedido['detalle'] as $detalle): ?>
+                                                <li>
+                                                    <?php echo htmlspecialchars($detalle['producto_nombre']) . " - " . htmlspecialchars($detalle['cantidad']) . " x $" . number_format($detalle['producto_precio'], 2) . " (Total: $" . number_format($detalle['cantidad'] * $detalle['producto_precio'], 3) . ")"; ?>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <li>No hay detalles disponibles.</li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </td>
+                                <td><?php echo number_format($pedido['total'], 3); ?></td>
+                                <td>
+                                    <form method="post" action="./php/aprobar_pedido.php" style="margin-bottom: 10px;">
+                                        <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
+                                        <button type="submit" name="accion" value="aprobar" class="button is-success">Aprobar Pedido</button>
+                                    </form>
+                                    <form method="post" action="./php/aprobar_pedido.php">
+                                        <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
+                                        <button type="submit" name="accion" value="rechazar" class="button is-danger">Rechazar Pedido</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div> <!-- Fin del contenedor table-container -->
         <?php else: ?>
             <div class="notification is-info">
                 No hay pedidos para mostrar.
@@ -103,6 +105,9 @@ try {
     <?php require_once "./inc/footer_V2.php"; ?>
 </body>
 </html>
+
+
+
 
 
 

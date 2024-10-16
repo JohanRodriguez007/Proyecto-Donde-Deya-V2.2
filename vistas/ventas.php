@@ -21,7 +21,7 @@ try {
     $total_ventas_count = (int)$stmt_total->fetchColumn(); // Total de registros
     
     // Obtener las ventas agrupadas por día con paginación
-    $sql = "SELECT v.venta_id, v.pedido_id, v.usuario_id, u.usuario_nombre, v.direccion, v.metodo_pago, DATE(v.fecha_pedido) AS fecha_pedido, v.total
+    $sql = "SELECT v.venta_id, v.pedido_id, v.usuario_id, u.usuario_nombre, u.usuario_apellido, v.direccion, v.metodo_pago, DATE(v.fecha_pedido) AS fecha_pedido, v.total
             FROM ventas v
             JOIN usuario u ON v.usuario_id = u.usuario_id
             ORDER BY fecha_pedido DESC
@@ -93,7 +93,7 @@ $Npaginas = ceil($total_ventas_count / $registros);
                     <tbody>
                         <?php foreach ($data['ventas'] as $venta): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($venta['usuario_nombre']); ?></td>
+                                <td><?php echo htmlspecialchars($venta['usuario_nombre']) . ' ' . htmlspecialchars($venta['usuario_apellido']); ?></td>
                                 <td><?php echo htmlspecialchars($venta['direccion']); ?></td>
                                 <td><?php echo htmlspecialchars($venta['metodo_pago']); ?></td>
                                 <td><?php echo htmlspecialchars($venta['fecha_pedido']); ?></td>
@@ -134,6 +134,7 @@ $Npaginas = ceil($total_ventas_count / $registros);
     <?php require_once "./inc/footer_V2.php"; ?>
 </body>
 </html>
+
 
 
 
