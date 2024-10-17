@@ -6,8 +6,8 @@ require_once "./modelo/Utils.php"; // Incluir archivo de utilidades
 $conn = Utils::conexion(); // Instanciar la conexión
 
 try {
-    // Obtener los pedidos pendientes, incluyendo el apellido del usuario
-    $sql = "SELECT p.pedido_id, p.usuario_id, u.usuario_nombre, u.usuario_apellido, p.direccion, p.metodo_pago, p.fecha_pedido
+    // Obtener los pedidos pendientes, incluyendo el apellido del usuario y la captura de transferencia
+    $sql = "SELECT p.pedido_id, p.usuario_id, u.usuario_nombre, u.usuario_apellido, p.direccion, p.metodo_pago, p.fecha_pedido, p.captura_transferencia
             FROM pedidos p
             JOIN usuario u ON p.usuario_id = u.usuario_id
             WHERE p.estado = 'Pendiente'
@@ -56,6 +56,7 @@ try {
                             <th>Fecha del Pedido</th>
                             <th>Detalles</th>
                             <th>Total</th>
+                            <th>Captura de Transferencia</th> <!-- Nueva columna para la captura -->
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -81,6 +82,20 @@ try {
                                 </td>
                                 <td><?php echo number_format($pedido['total'], 3); ?></td>
                                 <td>
+                                    <?php 
+                                        // Define la ruta base donde se almacenan las imágenes
+                                        $ruta_imagen = "./uploads/capturas/"; // Ajusta esta ruta según tu estructura de directorios
+
+                                        // Verifica si el método de pago es Transferencia Nequi y si hay una imagen
+                                        if ($pedido['metodo_pago'] === 'Transferencia Nequi' && !empty($pedido['captura_transferencia'])): 
+                                            $imagen_url = $ruta_imagen . htmlspecialchars($pedido['captura_transferencia']); // Concatenar la ruta
+                                            echo '<img src="' . $imagen_url . '" alt="Captura de Transferencia" style="max-width: 400px; max-height: 400px;">';
+                                        else: 
+                                            echo 'No hay foto.';
+                                        endif; 
+                                    ?>
+                                </td>
+                                <td>
                                     <form method="post" action="./php/aprobar_pedido.php" style="margin-bottom: 10px;">
                                         <input type="hidden" name="pedido_id" value="<?php echo htmlspecialchars($pedido['pedido_id']); ?>">
                                         <button type="submit" name="accion" value="aprobar" class="button is-success">Aprobar Pedido</button>
@@ -105,6 +120,8 @@ try {
     <?php require_once "./inc/footer_V2.php"; ?>
 </body>
 </html>
+
+
 
 
 

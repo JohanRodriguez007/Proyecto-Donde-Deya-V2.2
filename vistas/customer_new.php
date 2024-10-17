@@ -165,6 +165,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
         <?php endif; ?>
 
+        <?php 
+
+        echo '<div class="notification is-warning">
+             El nombre de usuario debe comenzar con una letra mayúscula.
+      </div>';
+        ?>
+
         <!-- Formulario -->
         <form action="" method="post" class="box" <?php echo $registro_exitoso ? 'style="display:none;"' : ''; ?>>
             <h2 class="title is-4">Registro</h2>
