@@ -23,6 +23,8 @@ try {
         // Validar nueva contraseña
         if (empty($nueva_password)) {
             $errores[] = 'El campo Nueva Contraseña es obligatorio.';
+        } elseif (!preg_match('/^[A-Za-z0-9]+$/', $nueva_password)) {
+            $errores[] = 'La nueva contraseña solo puede contener letras y números.';
         }
 
         // Verificar que la nueva contraseña no sea la misma que la actual
@@ -82,7 +84,7 @@ try {
             <div class="field">
                 <label class="label">Nueva Contraseña</label>
                 <div class="control">
-                    <input class="input" type="password" name="nueva_password" placeholder="Introduce una nueva contraseña" required <?php echo $password_restablecida ? 'disabled' : ''; ?>>
+                    <input class="input" type="password" name="nueva_password" placeholder="Introduce una nueva contraseña" required pattern="^[A-Za-z0-9]+$" title="La contraseña solo puede contener letras y números." <?php echo $password_restablecida ? 'disabled' : ''; ?>>
                 </div>
             </div>
 
@@ -100,6 +102,7 @@ try {
 </body>
 
 <?php require_once "./inc/footer_V2.php"; ?>
+
 
 
 

@@ -28,6 +28,12 @@ function validar_primera_mayuscula(string $texto): bool
     return ctype_upper(substr($texto, 0, 1));
 }
 
+function validar_usuario_contraseña(string $texto): bool
+{
+    // Solo permite letras y números
+    return preg_match('/^[A-Za-z0-9]+$/', $texto);
+}
+
 //-----------------------------------------------------
 // Variables
 //-----------------------------------------------------
@@ -70,11 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $errores[] = 'El campo Usuario es Obligatorio.';
     } elseif (!validar_primera_mayuscula($usuario)) {
         $errores[] = 'El nombre de usuario debe comenzar con una letra mayúscula.';
+    } elseif (!validar_usuario_contraseña($usuario)) {
+        $errores[] = 'El nombre de usuario solo puede contener letras y números.';
     }
 
     // Contraseña
     if (!validar_requerido($password)) {
         $errores[] = 'El campo Contraseña es Obligatorio.';
+    } elseif (!validar_usuario_contraseña($password)) {
+        $errores[] = 'La contraseña solo puede contener letras y números.';
     }
 
     /* Verificar que no existe en la base de datos el mismo email */
@@ -133,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->Subject = 'Active su Usuario';
             $emailEncode = urlencode($email);
             $tokenEncode = urlencode($token);
-            $mail->Body = "Hola!<br>Gracias por registrarte.<br>Para activar tu cuenta, por favor haz clic en el siguiente enlace:<br><a href='http://localhost/Proyecto-Donde-Deya-V2.2-main/index.php?vista=activate_customer&email=$emailEncode&token=$tokenEncode'>Activar cuenta</a>";
+            $mail->Body = "Hola $nombre!<br>Gracias por registrarte.<br>Tu nombre de usuario es: <strong>$usuario</strong>.<br>Para activar tu cuenta, por favor haz clic en el siguiente enlace:<br><a href='http://localhost/Proyecto-Donde-Deya-V2.2-main/index.php?vista=activate_customer&email=$emailEncode&token=$tokenEncode'>Activar cuenta</a>";
 
             $mail->send();
             $registro_exitoso = true; // Indicamos que el registro fue exitoso
@@ -166,14 +176,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php endif; ?>
 
         <?php 
-
-        echo '<div class="notification is-warning">
-             El nombre de usuario debe comenzar con una letra mayúscula.
-      </div>';
+        if (!$registro_exitoso) { 
+                echo '<div class="notification is-warning">
+                         El nombre de usuario debe comenzar con una letra mayúscula.
+                        </div>';
+            }
         ?>
 
         <!-- Formulario -->
         <form action="" method="post" class="box" <?php echo $registro_exitoso ? 'style="display:none;"' : ''; ?>>
+
             <h2 class="title is-4">Registro</h2>
 
             <div class="field">
@@ -193,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="field">
                 <label class="label">Usuario</label>
                 <div class="control">
-                    <input class="input" type="text" name="usuario" placeholder="Crea un nombre de usuario" required>
+                    <input class="input" type="text" name="usuario" placeholder="Crea un nombre de usuario" required pattern="^[A-Z][A-Za-z0-9]+$" title="El nombre de usuario debe comenzar con una letra mayúscula y solo puede contener letras y números.">
                 </div>
             </div>
 
@@ -207,20 +219,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="field">
                 <label class="label">Contraseña</label>
                 <div class="control">
-                    <input class="input" type="password" name="password" placeholder="Crea una contraseña" required>
+                    <input class="input" type="password" name="password" placeholder="Crea una contraseña" required pattern="^[A-Za-z0-9]+$" title="La contraseña solo puede contener letras y números.">
                 </div>
             </div>
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-primary" type="submit">Registrarse</button>
+                    <button type="submit" class="button is-link">Registrarse</button>
                 </div>
             </div>
         </form>
     </div>
 </body>
+<?php require_once "./inc/footer.php"; ?>
 
-<?php require_once "./inc/footer_V2.php"; ?>
 
 
 
